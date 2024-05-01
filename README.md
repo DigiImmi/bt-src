@@ -25,3 +25,10 @@ npm run build_dev
 
 
 #### GeoGebra
+参考 
++ [Apps with Toolbar: Graphing Calculator](https://dev.geogebra.org/examples/html/example-graphing.html)
+  + navigation.js 修改自 [https://dev.geogebra.org/examples/html/navigation.js](https://dev.geogebra.org/examples/html/navigation.js)
+  + navigation.css 修改自 [https://dev.geogebra.org/examples/html/navigation.css](https://dev.geogebra.org/examples/html/navigation.css)
++ [Reference:GeoGebra App Parameters](https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters)
+
+

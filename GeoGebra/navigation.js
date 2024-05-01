@@ -1,5 +1,6 @@
 function loadNav(){
-	insertStyle("https://fonts.googleapis.com/icon?family=Material+Icons");
+	insertStyle("./Icons.css?family=Material+Icons");
+	// https://fonts.googleapis.com/icon?family=Material+Icons 转为本地Icons.css
 }
 
 function insertStyle(url){

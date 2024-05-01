@@ -7,6 +7,26 @@ kkFileViewDomain='yourdomain'
 sed -i "s/example.com/${kkFileViewDomain}/" index.html
 ```
 
+
+#### GeoGebra
+参考 
++ [Apps with Toolbar: Graphing Calculator](https://dev.geogebra.org/examples/html/example-graphing.html)
+  + navigation.js 修改自 [https://dev.geogebra.org/examples/html/navigation.js](https://dev.geogebra.org/examples/html/navigation.js)
+   + https://fonts.googleapis.com/icon?family=Material+Icons 转为本地 Icons.css
+   + 下载了 https://fonts.gstatic.com/s/materialicons/v142/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2
+  + navigation.css 修改自 [https://dev.geogebra.org/examples/html/navigation.css](https://dev.geogebra.org/examples/html/navigation.css)
++ [Reference:GeoGebra App Parameters](https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters)
+
+
+
+
+
+
+
+  
+  
+  
+  
 #### 
 
 git clone https://github.com/kovacsv/Online3DViewer.git
@@ -22,13 +42,3 @@ npm run build_dev
 
 复制website/index.html
 在title附近合适位置添加hidden
-
-
-#### GeoGebra
-参考 
-+ [Apps with Toolbar: Graphing Calculator](https://dev.geogebra.org/examples/html/example-graphing.html)
-  + navigation.js 修改自 [https://dev.geogebra.org/examples/html/navigation.js](https://dev.geogebra.org/examples/html/navigation.js)
-  + navigation.css 修改自 [https://dev.geogebra.org/examples/html/navigation.css](https://dev.geogebra.org/examples/html/navigation.css)
-+ [Reference:GeoGebra App Parameters](https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters)
-
-

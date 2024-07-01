@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geogebra App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="navigation.js"></script>
+<!--    <script type="text/javascript" src="https://www.geogebra.org/apps/deployggb.js"></script>    -->
+    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+    <script type="text/javascript">
+        var errorbase64= "";  // 可定制错误页面文件转为base64编码
+        var hashstr = window.location.hash;
+        var parameters = { };
+        if ( hashstr.substr(0,10) !== "#file=http" ){
+            parameters = {
+            "appName": "classic", 
+            "width":800,
+            "height":600,
+            "enableRightClick": false,
+            "enableLabelDrags": false,
+            "enableShiftDragZoom": false,
+            "enableFileFeatures": false,
+            "language": "zh",
+            "enableUndoRedo": 3,
+            "ggbBase64": errorbase64
+            };
+        }
+        else {
+            parameters = {
+            "appName": "classic", 
+            "width":1280,
+            "height":720,
+            "showZoomButtons": true,
+            "showMenuBar": true,
+            "customToolBar": "",
+            "showAlgebraInput": true,
+            "language": "zh",
+            "capturingThreshold": 3,
+            "algebraInputPosition": "top",
+            "showAnimationButton": true,
+            "filename": hashstr.substr(6),
+            "playButton": true
+            };
+        }
+
+        var applet = new GGBApplet(parameters, true);
+        //  when used with Math Apps Bundle, uncomment this:
+        //  applet.setHTML5Codebase('GeoGebra/HTML5/5.0/web3d/');
+        window.onload = function() { applet.inject('GGBApp'); }
+    </script>
+  </head>
+  <body>
+    <div id="GGBApp"></div>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RufflePlayer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script>
+        var hashstr = window.location.hash;
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.RufflePlayer.config = {
+            "autoplay": "on",
+            "unmuteOverlay": "hidden",
+            "wmode": "window",
+            "letterbox": "fullscreen",
+            "warnOnUnsupportedContent": true,
+            "contextMenu": "on",
+            "showSwfDownload": false,
+            "maxExecutionDuration": 15,
+            "logLevel": "error",
+            "base": null,
+            "menu": true,
+            "salign": "",
+            "scale": "showAll",
+            "quality": "high",
+            "splashScreen": false,
+        };
+        if ( hashstr.substr(0,10) !== "#file=http" ){
+        window.addEventListener("load", (event) => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            const container = document.getElementById("rufflediv");
+            container.appendChild(player);
+            player.load("rufflelogo.swf");
+        });
+        }
+        else {
+        window.addEventListener("load", (event) => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            const container = document.getElementById("rufflediv");
+            container.appendChild(player);
+            player.load(hashstr.substr(6));
+        });
+        }
+    </script>
+    <script src="./rufflejs/ruffle.js"></script>
+    <style>
+        #rufflediv {
+            width:100%;
+            height:auto;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        :host ::ng-deep canvas {
+            position:unset !important;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="rufflediv"></div>
+  </body>
+</html>
+

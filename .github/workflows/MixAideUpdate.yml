@@ -1,0 +1,86 @@
+name: MixAide Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '1 1 * * 1'
+
+env:
+  MixString: ""
+
+permissions: write-all
+  
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: SH
+        run: |
+          #!/bin/bash
+          updateLazy=true
+          AimRepository='${{ github.repository }}'
+          sudo git clone "https://${AimRepository%%/*}:${{ secrets.GITHUB_TOKEN }}@github.com/${AimRepository}.git" . 2>/dev/null
+          
+          dirTemp=$(mktemp -u)
+          sudo git clone --single-branch --branch dependabot/npm_and_yarn/epubjs-0.3.92 https://github.com/futurepress/epubjs-reader.git "$dirTemp"
+          sudo npm install --prefix "$dirTemp"
+          if $updateLazy && [ -d "${dirTemp}/reader" ]; then
+            sudo rm -r ./epubjs-reader 2>/dev/null || true
+            sudo cp -r "${dirTemp}/reader" ./epubjs-reader
+          fi
+          
+          dirTemp=$(mktemp -u)
+          if $updateLazy && sudo git clone https://github.com/johnfactotum/foliate-js.git "$dirTemp"; then
+            sudo rm -r ./foliate-js 2>/dev/null || true
+            sudo cp -r "$dirTemp" ./foliate-js
+            sudo rm -r foliate-js/.git 2>/dev/null || true
+            sudo sed -i "/\.toolbar\s\+{/,/}/ s/width: 100%;/width: 96%;/" foliate-js/reader.html
+            sudo sed -i "s/\(menu\.groups\.layout\.select\)('paginated')/\1('scrolled')/" foliate-js/reader.js
+          fi
+          
+          dirTemp=$(mktemp -u)
+          if $updateLazy && sudo git clone https://github.com/sevinalucia/mobi-reader.git "$dirTemp"; then
+            sudo cp ./mobi-reader/chrome.js chrome.js
+            sudo rm -r ./mobi-reader 2>/dev/null || true
+            sudo cp -r "${dirTemp}/data/interface" ./mobi-reader
+            sudo sed -zi "s/\(\s\+\)config\.storage\.local = e;/&\1config\.storage\.local\.bookurl = window\.location\.hash\.substr(6);/" mobi-reader/index.js
+            sudo mv chrome.js ./mobi-reader/chrome.js
+            sudo sed -i '/<\/head>/i \    <script type="text\/javascript" src="chrome.js"><\/script>' mobi-reader/index.html
+          fi
+          
+          ruffle_tag1=$(wget -qO- -t1 -T2 "https://api.github.com/repos/ruffle-rs/ruffle/releases" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
+          ruffle_tag2=${ruffle_tag1//-/_}
+          ruffle_tag2=${ruffle_tag2/_/-}
+          if $updateLazy && sudo curl -fsL --output ruffle.zip https://github.com/ruffle-rs/ruffle/releases/download/${ruffle_tag1}/ruffle-${ruffle_tag2}-web-selfhosted.zip; then
+            sudo rm -rf Ruffle/rufflejs 2>/dev/null || true
+            sudo mkdir -p Ruffle/rufflejs
+            sudo unzip -o -d Ruffle/rufflejs ruffle.zip
+            sudo sed -i 's/position: relative/position: unset/' Ruffle/rufflejs/ruffle.js
+          fi
+          sudo rm -f ruffle.zip 2>/dev/null
+          
+          dirTemp=$(mktemp -u)
+          if sudo git clone https://github.com/kovacsv/Online3DViewer.git "$dirTemp"; then
+            sudo npm install --prefix "$dirTemp"
+            sudo npm run build_dev --prefix "$dirTemp"
+            sudo cp -r "${dirTemp}/build" "${dirTemp}/website/"
+            sudo cp -r "${dirTemp}/libs" "${dirTemp}/website/"
+            sudo rm -r ./Online3DViewer 2>/dev/null || true
+            sudo cp -r "${dirTemp}/website/" ./Online3DViewer
+            sudo sed -i "s/\.\.\///" Online3DViewer/index.html Online3DViewer/embed.html
+            sudo cp Online3DViewer/index.html Online3DViewer/hidden.html
+            sudo sed -i 's/<div class="toolbar" id="toolbar"/& hidden/' Online3DViewer/hidden.html
+            sudo sed -i 's/<div class="title"/& hidden/' Online3DViewer/hidden.html
+          fi
+
+                     
+          RemoteURL="https://${AimRepository%%/*}:${{ secrets.GITHUB_TOKEN }}@github.com/${AimRepository}.git"
+          sudo rm -r .git
+          sudo git init --initial-branch=main
+          sudo git remote add origin "$RemoteURL"
+          sudo git config user.name "${AimRepository%%/*}"
+          sudo git config user.email "${AimRepository%%/*}@hotmail.com"
+          sudo git add .
+          sudo git commit -m "Update repository $(date)"
+          sudo git push -f origin main

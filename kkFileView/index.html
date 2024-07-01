@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>kkFileView</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="base64.min.js"> //也可用 https://qt.cxcp.net/js/base64.min.js
+    </script>  
+</head>
+<body>
+    <script type="text/javascript">
+    var previewUrl = window.location.hash.substr(6);
+    var encodedUrl = encodeURIComponent(Base64.encode(previewUrl));
+    var iframe = window.frameElement; // 获取当前页面所在的iframe元素
+    iframe.src = 'https://example.com/onlinePreview?url=' + encodedUrl;
+    </script>
+</body>
+</html>
